@@ -1,35 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 24.04.2025 17:23:20
--- Design Name: 
--- Module Name: xadc_wrapper - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- V1.0
 ----------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity xadc_wrapper is
     Port (
@@ -77,7 +53,7 @@ begin
         reset_in => rst,
         vp_in => zero,  --vp_in,
         vn_in => zero,  --vn_in,
-        vauxp1 => Vaux1_v_p, -- Que si funciona
+        vauxp1 => Vaux1_v_p,
         vauxn1 => Vaux1_v_n,
         channel_out => open,
         eoc_out => open,
