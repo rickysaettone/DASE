@@ -36,46 +36,26 @@ entity xadc_wrapper is
         clk         :   in std_logic;
         rst         :   in std_logic;
         start       :   in std_logic;
-        led         :   out std_logic_vector (11 downto 0);
-        Vauxl_v_n   :   in std_logic;
+        leds        :   out std_logic_vector (11 downto 0);
+        Vaux1_v_n   :   in std_logic;
         Vaux1_v_p   :   in std_logic
     );
 end xadc_wrapper;
 
 architecture Behavioral of xadc_wrapper is
-
---    component xadc_wiz_0 is
---    Port(   di_in       :   in std_logic;
---            daddr_in    :   in std_logic;
---            den_in      :   in std_logic;
---            dwe_in      :   in std_logic;
---            drdy_out    :   out std_logic;
---            do_out      :   out std_logic;
---            dclk_in     :   in std_logic;
---            reset_in    :   in std_logic;
---            vp_in       :   in std_logic;
---            vn_in       :   in std_logic;
---            vauxp1      :   in std_logic;
---            vauxn1      :   in std_logic;
---            channel_out :   out std_logic;
---            eoc_out     :   out std_logic;
---            alarm_out   :   out std_logic;
---            eos_out     :   out std_logic;
---            busy_out    :   out std_logic);
---    end component;
     
-    component controller is
-    Port ( clk_i    : in STD_LOGIC;
-           rst_i    : in STD_LOGIC;
-           start_i  : in std_logic;
-           leds_o   : out std_logic_vector(11 downto 0);
-           den_o    : out STD_LOGIC;
-           daddr_o  : out STD_LOGIC_VECTOR (6 downto 0);
-           di_o     : out STD_LOGIC_VECTOR (15 downto 0);
-           do_i     : in STD_LOGIC_VECTOR (15 downto 0);
-           drdy_i   : in STD_LOGIC;
-           dwe_o    : out STD_LOGIC);
-    end component;
+--    component controller is
+--        Port ( clk_i    : in STD_LOGIC;
+--               rst_i    : in STD_LOGIC;
+--               start_i  : in std_logic;
+--               leds_o   : out std_logic_vector(11 downto 0);
+--               den_o    : out STD_LOGIC;
+--               daddr_o  : out STD_LOGIC_VECTOR (6 downto 0);
+--               di_o     : out STD_LOGIC_VECTOR (15 downto 0);
+--               do_i     : in STD_LOGIC_VECTOR (15 downto 0);
+--               drdy_i   : in STD_LOGIC;
+--               dwe_o    : out STD_LOGIC);
+--    end component;
     
     constant zero : std_logic := '0';
     
@@ -86,7 +66,7 @@ architecture Behavioral of xadc_wrapper is
 begin
 
     XADC_inst : entity work.xadc_wiz_0
-      PORT MAP (
+    PORT MAP (
         di_in => di,
         daddr_in => daddr,
         den_in => den,
@@ -104,20 +84,33 @@ begin
         alarm_out => open,
         eos_out => open,
         busy_out => open
-      );
+    );
   
-    Control : controller
-        port map ( clk_i    =>  clk,
-                   rst_i    =>  rst,
-                   start_i  =>  start,
-                   leds_o   =>  led,
-                   den_o    =>  den,
-                   daddr_o  =>  daddr,
-                   di_o     =>  di,
-                   do_i     =>  do,
-                   drdy_i   =>  drdy,
-                   dwe_o    =>  dwe
-                   );
+--    Control : controller
+--        port map ( clk_i    =>  clk,
+--                   rst_i    =>  rst,
+--                   start_i  =>  start,
+--                   leds_o   =>  leds,
+--                   den_o    =>  den,
+--                   daddr_o  =>  daddr,
+--                   di_o     =>  di,
+--                   do_i     =>  do,
+--                   drdy_i   =>  drdy,
+--                   dwe_o    =>  dwe
+--                   );
+
+    Control : entity work.controller
+    PORT MAP ( clk_i    =>  clk,
+               rst_i    =>  rst,
+               start_i  =>  start,
+               leds_o   =>  leds,
+               den_o    =>  den,
+               daddr_o  =>  daddr,
+               di_o     =>  di,
+               do_i     =>  do,
+               drdy_i   =>  drdy,
+               dwe_o    =>  dwe
+               );
 
 
 end Behavioral;
