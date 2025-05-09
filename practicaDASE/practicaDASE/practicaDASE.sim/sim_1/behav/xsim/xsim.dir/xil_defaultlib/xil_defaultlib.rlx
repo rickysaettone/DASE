@@ -1,9 +1,0 @@
-0.7
-2020.1
-May 27 2020
-20:09:33
-C:/Users/migue/Desktop/DASE/lab_wrapper_tb.vhd,1745504603,vhdl,,,,xadc_wrapper_tb,,,,,,,,
-C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.sim/sim_1/behav/xsim/glbl.v,1590624368,verilog,,,,glbl,,,,,,,,
-C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.v,1746726909,verilog,C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.srcs/sources_1/new/xadc_wrapper.vhd,,,xadc_wiz_0,,,,,,,,
-C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.srcs/sources_1/new/controller.vhd,1745512199,vhdl,C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.srcs/sources_1/new/xadc_wrapper.vhd,,,controller,,,,,,,,
-C:/Users/migue/Desktop/DASE/practicaDASE/practicaDASE.srcs/sources_1/new/xadc_wrapper.vhd,1746729654,vhdl,C:/Users/migue/Desktop/DASE/lab_wrapper_tb.vhd,,,xadc_wrapper,,,,,,,,
