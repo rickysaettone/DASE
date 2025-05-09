@@ -77,7 +77,7 @@ begin
         reset_in => rst,
         vp_in => zero,  --vp_in,
         vn_in => zero,  --vn_in,
-        vauxp1 => Vaux1_v_p, -- No funciona porque vauxp1 y vauxn1 no están definidos en el componente original, los escribió el profesor por la cara
+        vauxp1 => Vaux1_v_p, -- Que si funciona
         vauxn1 => Vaux1_v_n,
         channel_out => open,
         eoc_out => open,
