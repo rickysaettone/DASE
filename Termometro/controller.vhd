@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 
-entity input_interpreter is
+entity controller is
     generic (
         C_SAMPLE_FREQ   : integer := 125;--000000;
         C_CHANNEL_ADDR  : std_logic_vector(6 downto 0) := "0010001"
@@ -28,9 +28,9 @@ entity input_interpreter is
            do_i     : in STD_LOGIC_VECTOR (15 downto 0);
            drdy_i   : in STD_LOGIC;
            dwe_o    : out STD_LOGIC);
-end input_interpreter;
+end controller;
 
-architecture Behavioral of input_interpreter is
+architecture Behavioral of controller is
 
     type Status_g is (S_IDLE, S_ACQ, S_WAIT);
     signal STATE        :   Status_g;
