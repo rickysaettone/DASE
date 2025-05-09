@@ -44,7 +44,7 @@ architecture Behavioral of xadc_wrapper_tb is
 
 begin
 
-    dut : entity work.xadc_wrapper
+    dut : entity work.termometro_wrapper
     port map (
         Vaux1_v_n   => vaux1_n,
         Vaux1_v_p   => vaux1_p,

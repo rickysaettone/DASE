@@ -20,19 +20,6 @@ end termometro_wrapper;
 
 architecture Behavioral of termometro_wrapper is
     
---    component controller is
---        Port ( clk_i    : in STD_LOGIC;
---               rst_i    : in STD_LOGIC;
---               start_i  : in std_logic;
---               leds_o   : out std_logic_vector(11 downto 0);
---               den_o    : out STD_LOGIC;
---               daddr_o  : out STD_LOGIC_VECTOR (6 downto 0);
---               di_o     : out STD_LOGIC_VECTOR (15 downto 0);
---               do_i     : in STD_LOGIC_VECTOR (15 downto 0);
---               drdy_i   : in STD_LOGIC;
---               dwe_o    : out STD_LOGIC);
---    end component;
-    
     constant zero : std_logic := '0';
     
     signal den, dwe, drdy   :   std_logic;
@@ -61,19 +48,6 @@ begin
         eos_out => open,
         busy_out => open
     );
-  
---    Control : controller
---        port map ( clk_i    =>  clk,
---                   rst_i    =>  rst,
---                   start_i  =>  start,
---                   leds_o   =>  leds,
---                   den_o    =>  den,
---                   daddr_o  =>  daddr,
---                   di_o     =>  di,
---                   do_i     =>  do,
---                   drdy_i   =>  drdy,
---                   dwe_o    =>  dwe
---                   );
 
     Control : entity work.controller
     PORT MAP ( clk_i    =>  clk,
@@ -86,7 +60,7 @@ begin
                do_i     =>  do,
                drdy_i   =>  drdy,
                dwe_o    =>  dwe
-               );
+    );
 
 
 end Behavioral;
