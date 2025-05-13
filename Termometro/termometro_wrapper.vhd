@@ -47,7 +47,7 @@ begin
         alarm_out => open,
         eos_out => open,
         busy_out => open
-    );
+    );    
 
     Control : entity work.controller
     PORT MAP ( clk_i    =>  clk,
@@ -60,6 +60,15 @@ begin
                do_i     =>  do,
                drdy_i   =>  drdy,
                dwe_o    =>  dwe
+    );
+    
+    pwm_inst: entity work.pwm_out
+    port map (
+        clk      => clk,
+        reset    => rst,
+        start    => start,
+        comp_val => do,
+        pwm_out  => open
     );
 
 

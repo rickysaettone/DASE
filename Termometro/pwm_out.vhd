@@ -18,10 +18,14 @@ end pwm_out;
 architecture Behavioral of pwm_out is
 
     signal enable       : std_logic;
-    constant div_MAX    : integer := (125*10**6/14)-1;
+    constant div_MAX    : integer := 49;--(125*10**6/14)-1; -- Frecuencia de PWM de 10,416 MHz
     signal div          : integer range 0 to div_MAX;
     signal pulse        : std_logic;
+    
+    constant cont_MAX   : integer := 255;
+    signal cont         : integer range 0 to cont_MAX;
     signal pwm_signal   : std_logic;
+    signal pwm_pulse    : std_logic;
     
 begin
 
@@ -39,7 +43,6 @@ begin
                       enable <= '1';
                   end if;
               end if;
-              
           end process;
 
 ----------------- DIVISOR DE FRECUENCIA -----------------
@@ -59,7 +62,27 @@ begin
         end if;
     end process;
 
-    --pulse <= '1' when (div = comp_val and enable='1') else '0'; -- comparador
+    pulse <= '1' when (div = div_MAX and enable='1') else '0';
+
+----------------- CONTADOR PWM -----------------
+
+    process(clk,reset)
+    begin
+        if (reset = '1') then
+            cont <= 0;
+        elsif  (clk'event and clk = '1') then
+            if (pulse = '1') then
+                if (cont < cont_MAX) then
+                    cont <= cont + 1;
+                else
+                    cont <= 0;
+                end if;
+            end if;
+        end if;
+    end process;
+    
+    -- comparador
+    pwm_pulse <= '1' when (cont < unsigned(comp_val(15 downto 8)) and enable='1') else '0';
 
 ----------------- REGISTRO DE SEÑAL PWM -----------------
 
@@ -68,7 +91,7 @@ begin
         if (reset = '1') then
             pwm_signal <= '0';
         elsif  (clk'event and clk = '1') then
-            if (pulse = '1') then
+            if (pwm_pulse = '1') then
                 pwm_signal <= not pwm_signal;
             end if;
         end if;
