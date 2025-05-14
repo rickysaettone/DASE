@@ -75,6 +75,8 @@ begin
     --);
     
     prueba_mult: entity work.multiplicador
+    generic map( N_bits => 4 
+    )
     port map ( clk_i    =>  clk,
                rst_i    =>  rst,
                rdy_in   =>  rdy_tb,

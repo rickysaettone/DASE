@@ -19,9 +19,9 @@ entity multiplicador is
            rdy_in   :   in  std_logic;
            --n_in     :   in  std_logic_vector(15 downto 0); -- 8 bits de parte entera y 8 de fraccionaria
            --n_out    :   out std_logic_vector(15 downto 0)  -- 8 bits de parte entera y 8 de fraccionaria
-           n1_in    :   in  std_logic_vector(3 downto 0);
-           n2_in    :   in  std_logic_vector(3 downto 0);
-           n_out    :   out std_logic_vector(3 downto 0);
+           n1_in    :   in  std_logic_vector(N_bits-1 downto 0);
+           n2_in    :   in  std_logic_vector(N_bits-1 downto 0);
+           n_out    :   out std_logic_vector(N_bits-1 downto 0);
            rdy_out  :   out std_logic
     );
 
@@ -38,58 +38,9 @@ architecture Behavioral of multiplicador is
     signal n_S      :   std_logic_vector(N_bits*2 downto 0);
     signal n_P      :   array_P;
     signal n_P_desp :   array_P_desp;
-
-    --signal n_A      :   std_logic_vector(8 downto 0);
-    --signal n_S      :   std_logic_vector(8 downto 0);
-    --signal n_P0     :   std_logic_vector(8 downto 0);
-    --signal n_P1     :   std_logic_vector(8 downto 0);
-    --signal n_P1d    :   std_logic_vector(8 downto 0);
-    --signal n_P2     :   std_logic_vector(8 downto 0);
-    --signal n_P2d    :   std_logic_vector(8 downto 0);
-    --signal n_P3     :   std_logic_vector(8 downto 0);
-    --signal n_P3d    :   std_logic_vector(8 downto 0);
-    --signal n_P4     :   std_logic_vector(8 downto 0);
-    --signal n_P4d    :   std_logic_vector(8 downto 0);
-
-    --signal n_A      :   std_logic_vector(15 downto 0);
-    --signal n_S      :   std_logic_vector(15 downto 0);
-    --signal n_P0     :   std_logic_vector(15 downto 0);
-    --signal n_P1     :   std_logic_vector(15 downto 0);
-    --signal n_P2     :   std_logic_vector(15 downto 0);
-    --signal n_P3     :   std_logic_vector(15 downto 0);
-    --signal n_P4     :   std_logic_vector(15 downto 0);
-    --signal n_P5     :   std_logic_vector(15 downto 0);
-    --signal n_P6     :   std_logic_vector(15 downto 0);
-    --signal n_P7     :   std_logic_vector(15 downto 0);
-    --signal n_P8     :   std_logic_vector(15 downto 0);
-    --signal n_P9     :   std_logic_vector(15 downto 0);
+    
 
 begin
-    --FSM: process(clk_i, rst_i)
-    --begin
-    --
-    --    if (rst_i = '1') then
-    --
-    --        STATE <= S_IDLE;
-    --        --n_celsius <= "0";
-    --
-    --    elsif (rising_edge(clk_i)) then
-    --
-    --        case STATE is
-    --
-    --            when S_IDLE =>
-    --
-    --                if (rdy_in = '1') then
-    --                    STATE <= S_MULT1;
-    --                end if;
-    --                
-    --            when S_MULT1 =>
-    --
-    --                STATE <= S_IDLE;
-    --
-    --        end case;
-    --    end if;
-    --end process;
     
     activador: process(clk_i, rst_i)
     begin
@@ -97,7 +48,7 @@ begin
         if (rst_i = '1') then
         
             rdy_out <= '0';
-            n_out <= "0000";
+            n_out <= (others => '0');
             
         elsif (rising_edge(clk_i)) then
             
@@ -130,23 +81,23 @@ begin
               std_logic_vector(signed(n_P(0)) + signed(n_S)) when n_P(0)(1 downto 0) = "10" else
               n_P(0) when n_P(0)(1 downto 0) = "00" else
               n_P(0) when n_P(0)(1 downto 0) = "11" else
-            "000000000";
+              (others => '0');
     n_P_desp(0) <= "0" & n_P(1)(8 downto 1) when n_P(1)(8) = '0' else
                    "1" & n_P(1)(8 downto 1) when n_P(1)(8) = '1' else
-                   "000000000";
+                   (others => '0');
                    
-    jajagenerate: for i in 2 to N_bits generate
+    iteraciones_mult: for i in 2 to N_bits generate
 
         n_P(i) <= std_logic_vector(signed(n_P_desp(i-2)) + signed(n_A)) when n_P_desp(i-2)(1 downto 0) = "01" else
                   std_logic_vector(signed(n_P_desp(i-2)) + signed(n_S)) when n_P_desp(i-2)(1 downto 0) = "10" else
                   n_P_desp(i-2) when n_P_desp(i-2)(1 downto 0) = "00" else
                   n_P_desp(i-2) when n_P_desp(i-2)(1 downto 0) = "11" else
-                  "000000000";
+                  (others => '0');
         n_P_desp(i-1) <= "0" & n_P(i)(8 downto 1) when n_P(i)(8) = '0' else
                          "1" & n_P(i)(8 downto 1) when n_P(i)(8) = '1' else
-                         "000000000";
+                         (others => '0');
     
-    end generate jajagenerate;
+    end generate iteraciones_mult;
     
     -- Revisar si me puedo desacer de n_P_desp metiendo la operacion en otro sitio
     -- igual ver si ya existe el operador
