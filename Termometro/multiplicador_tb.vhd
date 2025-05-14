@@ -5,6 +5,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 
 entity multiplicador_tb is
@@ -18,7 +19,7 @@ architecture Behavioral of multiplicador_tb is
     signal leds             :   std_logic_vector(11 downto 0);
     signal vaux1_n, vaux1_p :   std_logic;
     signal rdy_mult         :   std_logic;
-    signal n1_mult, n2_mult :   std_logic_vector(7 downto 0);
+    signal n1_mult, n2_mult :   std_logic_vector(15 downto 0);
 
 begin
 
@@ -68,34 +69,90 @@ begin
         n1_mult <= (others => '0');
         n2_mult <= (others => '0');
         wait for 5*CLK_PERIOD;
-        
-        rdy_mult <= '1';
-        n1_mult <= "00000101";
-        n2_mult <= "00000011";
-        wait for 1*CLK_PERIOD;
-        
-        rdy_mult <= '0';
-        wait for 5*CLK_PERIOD;
-        
-        rdy_mult <= '1';
-        n1_mult <= "00000001";
-        n2_mult <= "00000001";
-        wait for 1*CLK_PERIOD;
-        
-        rdy_mult <= '0';
-        wait for 5*CLK_PERIOD;
-        
-        rdy_mult <= '1';
-        n1_mult <= "00000011";
-        n2_mult <= "00000010";
-        wait for 1*CLK_PERIOD;
-        
-        rdy_mult <= '0';
-        n1_mult <= (others => '0');
-        n2_mult <= (others => '0');
+        --
+        --rdy_mult <= '1';
+        --n1_mult <= "00000101";
+        --n2_mult <= "00000011";
         --wait for 1*CLK_PERIOD;
-        
+        --
         --rdy_mult <= '0';
+        --wait for 5*CLK_PERIOD;
+        --
+        --rdy_mult <= '1';
+        --n1_mult <= "00000001";
+        --n2_mult <= "00000001";
+        --wait for 1*CLK_PERIOD;
+        --
+        --rdy_mult <= '0';
+        --wait for 5*CLK_PERIOD;
+        --
+        --rdy_mult <= '1';
+        --n1_mult <= "00000011";
+        --n2_mult <= "00000010";
+        --wait for 1*CLK_PERIOD;
+        --
+        --rdy_mult <= '0';
+        --wait for 5*CLK_PERIOD;
+        --
+        --rdy_mult <= '1';
+        --n1_mult <= "00001010";
+        --n2_mult <= "00000110";
+        --wait for 1*CLK_PERIOD;
+        --
+        --rdy_mult <= '0';
+        --n1_mult <= (others => '0');
+        --n2_mult <= (others => '0');
+        ----wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '1';
+        n1_mult <= std_logic_vector(shift_left(to_signed(5, n1_mult'length), 6));
+        n2_mult <= std_logic_vector(shift_left(to_signed(7, n1_mult'length), 6));
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        wait for 5*CLK_PERIOD;
+        
+        rdy_mult <= '1';
+        n1_mult <= "0000000101000000";
+        n2_mult <= "0000000011000000";
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        wait for 5*CLK_PERIOD;
+        
+        rdy_mult <= '1';
+        n1_mult <= "0000000001000000";
+        n2_mult <= "0000000001000000";
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        wait for 5*CLK_PERIOD;
+        
+        rdy_mult <= '1';    -- Para 35ºC
+        n1_mult <= "0000000000000000";
+        n2_mult <= "0000000000000001";
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        wait for 5*CLK_PERIOD;
+        
+        rdy_mult <= '1';    -- Para 39ºC
+        n1_mult <= "0100000000000000";
+        n2_mult <= "0000000000000001";
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        wait for 5*CLK_PERIOD;
+        
+        rdy_mult <= '1';    -- Para 43ºC
+        n1_mult <= "0111111111111111";
+        n2_mult <= "0000000000000001";
+        wait for 1*CLK_PERIOD;
+        
+        rdy_mult <= '0';
+        --n1_mult <= (others => '0');
+        --n2_mult <= (others => '0');
+
         wait;
     end process;
 
