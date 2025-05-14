@@ -65,14 +65,14 @@ begin
                dwe_o    =>  dwe
     );
     
-    --pwm_inst: entity work.pwm_out
-    --port map (
-    --    clk      => clk,
-    --    reset    => rst,
-    --    start    => start,
-    --    comp_val => do,
-    --    pwm_out  => open
-    --);
+    pwm_inst: entity work.pwm_out
+    port map (
+        clk      => clk,
+        reset    => rst,
+        start    => start,
+        comp_val => do,
+        pwm_out  => open
+    );
     
     prueba_mult: entity work.multiplicador
     generic map( N_bits => 8
