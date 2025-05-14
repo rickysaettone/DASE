@@ -16,8 +16,8 @@ entity termometro_wrapper is
         Vaux1_v_n   :   in std_logic;
         Vaux1_v_p   :   in std_logic;
         rdy_tb      :   in std_logic;
-        n1_tb       :   in std_logic_vector(6 downto 0);
-        n2_tb       :   in std_logic_vector(6 downto 0)
+        n1_tb       :   in std_logic_vector(7 downto 0);
+        n2_tb       :   in std_logic_vector(7 downto 0)
     );
 end termometro_wrapper;
 
@@ -75,7 +75,7 @@ begin
     --);
     
     prueba_mult: entity work.multiplicador
-    generic map( N_bits => 7
+    generic map( N_bits => 8
     )
     port map ( clk_i    =>  clk,
                rst_i    =>  rst,

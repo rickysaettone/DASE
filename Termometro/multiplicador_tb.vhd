@@ -18,7 +18,7 @@ architecture Behavioral of multiplicador_tb is
     signal leds             :   std_logic_vector(11 downto 0);
     signal vaux1_n, vaux1_p :   std_logic;
     signal rdy_mult         :   std_logic;
-    signal n1_mult, n2_mult :   std_logic_vector(6 downto 0);
+    signal n1_mult, n2_mult :   std_logic_vector(7 downto 0);
 
 begin
 
@@ -70,24 +70,24 @@ begin
         wait for 5*CLK_PERIOD;
         
         rdy_mult <= '1';
-        n1_mult <= "0000101";
-        n2_mult <= "0000011";
+        n1_mult <= "00000101";
+        n2_mult <= "00000011";
         wait for 1*CLK_PERIOD;
         
         rdy_mult <= '0';
         wait for 5*CLK_PERIOD;
         
         rdy_mult <= '1';
-        n1_mult <= "0000001";
-        n2_mult <= "0000001";
+        n1_mult <= "00000001";
+        n2_mult <= "00000001";
         wait for 1*CLK_PERIOD;
         
         rdy_mult <= '0';
         wait for 5*CLK_PERIOD;
         
         rdy_mult <= '1';
-        n1_mult <= "0000011";
-        n2_mult <= "0000010";
+        n1_mult <= "00000011";
+        n2_mult <= "00000010";
         wait for 1*CLK_PERIOD;
         
         rdy_mult <= '0';
