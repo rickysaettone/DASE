@@ -17,7 +17,8 @@ entity termometro_wrapper is
         Vaux1_v_p   :   in std_logic;
         rdy_tb      :   in std_logic;
         n1_tb       :   in std_logic_vector(15 downto 0);
-        n2_tb       :   in std_logic_vector(15 downto 0)
+        n2_tb       :   in std_logic_vector(15 downto 0);
+        n_tb       :   in std_logic_vector(11 downto 0)
     );
 end termometro_wrapper;
 
@@ -83,6 +84,18 @@ begin
                rdy_in   =>  rdy_tb,
                n1_in    =>  n1_tb,
                n2_in    =>  n2_tb,
+               n_out    =>  open,
+               rdy_out  =>  open
+    );
+    
+    conv_celsius: entity work.conversion_celsius
+    generic map ( N_bits        =>  16,
+                  N_decimales   =>  6
+    )
+    port map ( clk_i    =>  clk,
+               rst_i    =>  rst,
+               rdy_in   =>  rdy_tb,
+               n_in     =>  n_tb,
                n_out    =>  open,
                rdy_out  =>  open
     );
