@@ -69,16 +69,18 @@ begin
         divisor   <= "0000010100000000"; -- 5
         wait for 1*CLK_PERIOD;
         
-        --rdy_in <= '0';
-        --wait for 10*CLK_PERIOD;
-        --
-        --rdy_in    <= '1';
-        --dividendo <= "0000000100000000"; -- 1
-        --divisor   <= "0000001000000000"; -- 2
-        --wait for 1*CLK_PERIOD;
+        rdy_in <= '0';
+        wait until rdy_out = '1';
+        wait for 1*CLK_PERIOD;
+        
+        rdy_in    <= '1';
+        dividendo <= "0000000100000000"; -- 1
+        divisor   <= "0000001000000000"; -- 2
+        wait for 1*CLK_PERIOD;
         
         rdy_in <= '0';
-        wait for 10*CLK_PERIOD;
+        wait until rdy_out = '1';
+        wait for 1*CLK_PERIOD;
         --
         --rdy_in    <= '1';
         --dividendo <= "00000011";

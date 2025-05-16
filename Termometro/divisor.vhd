@@ -10,15 +10,16 @@ use IEEE.NUMERIC_STD.ALL;
 entity divisor is
     generic (
             N_bits_div    : integer := 16;
-            N_decim_div   : integer := 8
+            N_decim_div   : integer := 9;
+            N_iter_div    : integer := 4
     );
     Port ( clk          : in std_logic;
            reset        : in std_logic;
            
            -- Componentes del divisor
-           dividendo_i  : in  std_logic_vector (15 downto 0);
-           divisor_i    : in  std_logic_vector (15 downto 0);
-           division_o   : out std_logic_vector (15 downto 0);
+           dividendo_i  : in  std_logic_vector (N_bits_div-1 downto 0);
+           divisor_i    : in  std_logic_vector (N_bits_div-1 downto 0);
+           division_o   : out std_logic_vector (N_bits_div-1 downto 0);
            rdy_div_in       : in  std_logic;
            rdy_div_out      : out std_logic                   
     );
@@ -42,37 +43,33 @@ architecture Behavioral of divisor is
         );
     end component;
 
-    type state_type is (S_IDLE, S_MULT1, S_MULT2, S_FINAL);
+    type state_type is (S_IDLE, S_MULT1, S_MULT2, S_DIVIS, S_FINAL);
     signal STATE : state_type := S_IDLE;
     
-    constant cont_MAX   : integer := 3;
+    constant cont_MAX   : integer := N_iter_div;
     signal cont         : integer range 0 to cont_MAX;
-    constant two        : std_logic_vector (15 downto 0) := "0000001000000000";
-    signal result       : std_logic_vector (15 downto 0);
+    signal two          : std_logic_vector (N_bits_div-1 downto 0);
+    signal result       : std_logic_vector (N_bits_div-1 downto 0);
     
     -- Newton Raphson: x = (2 - D*x)*x
-    signal x            : std_logic_vector (15 downto 0) := "0000000000011010"; -- Val inicial 0.1
-    signal N            : std_logic_vector (15 downto 0); -- Numerador
-    signal D            : std_logic_vector (15 downto 0); -- Denominador
+    signal x            : std_logic_vector (N_bits_div-1 downto 0); -- Val inicial 0.1
+    signal N            : std_logic_vector (N_bits_div-1 downto 0); -- Numerador
+    signal D            : std_logic_vector (N_bits_div-1 downto 0); -- Denominador
     
     -- Mult1: D*x
-    signal mult_a1       : std_logic_vector (15 downto 0);
-    signal mult_b1       : std_logic_vector (15 downto 0);
-    signal mult_res1     : std_logic_vector (15 downto 0);
+    signal mult_a1       : std_logic_vector (N_bits_div-1 downto 0);
+    signal mult_b1       : std_logic_vector (N_bits_div-1 downto 0);
+    signal mult_res1     : std_logic_vector (N_bits_div-1 downto 0);
     signal rdy_mult_in1  : std_logic;
     signal rdy_mult_out1 : std_logic;
     
     -- Mult2: (2-Mult1)*x
-    signal mult_a2       : std_logic_vector (15 downto 0);
-    signal mult_b2       : std_logic_vector (15 downto 0);
-    signal mult_res2     : std_logic_vector (15 downto 0);
+    signal mult_a2       : std_logic_vector (N_bits_div-1 downto 0);
+    signal mult_b2       : std_logic_vector (N_bits_div-1 downto 0);
+    signal mult_res2     : std_logic_vector (N_bits_div-1 downto 0);
     signal rdy_mult_in2  : std_logic;
     signal rdy_mult_out2 : std_logic;
     
-    signal debug         : STRING(1 to 3);
-    
-    
-
 begin
     mult1 : multiplicador
         generic map (
@@ -121,7 +118,15 @@ begin
                 when S_IDLE =>
                 
                     if (rdy_div_in = '1') then
+                        
+                        -- Establecer valor de el número 2 para N bits con M decimales
+                        two <= std_logic_vector(to_signed(2**(N_decim_div+1), N_bits_div));
+                        -- Establece un valor decimal inicial de x para N bits con M decimales
+                        x <= (others => '0');
+                        x(N_decim_div-3) <= '1'; 
+                    
                         STATE <= S_MULT1;
+                        
                     end if;
                     
                     rdy_div_out <= '0';
@@ -174,30 +179,40 @@ begin
                             cont <= cont + 1;
                             
                         else
-                    
-                            -- Multiplicacion del dividendo y el inverso del divisor N*x
-                            rdy_mult_in1 <= '1';
-                            mult_a1 <= N;
-                            mult_b1 <= x;
+                                                       
                             
-                            STATE <= S_FINAL;
+                            STATE <= S_DIVIS;
                             
                         end if;
+                        
+                    end if;
+                    
+                when S_DIVIS =>
+                
+                    rdy_mult_in2 <= '0';
+                
+                    if (rdy_mult_out2 = '1') then
+                    
+                        -- Multiplicacion del dividendo y el inverso del divisor N*x
+                        rdy_mult_in1 <= '1';
+                        mult_a1 <= N;
+                        mult_b1 <= x;
+                        
+                        STATE <= S_FINAL;
                         
                     end if;
                     
                 when S_FINAL =>
                 
                     rdy_mult_in1 <= '0';
-                    rdy_mult_in2 <= '0';
                     
                     if (rdy_mult_out1 = '1') then
                     
                         result <= mult_res1;
-                        
                         rdy_div_out <= '1';
                     
                         STATE <= S_IDLE;
+                        
                     end if;
                 
             end case;
